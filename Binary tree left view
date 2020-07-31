@@ -1,0 +1,143 @@
+import java.util.*;
+public class Main {
+
+	static Scanner scn = new Scanner(System.in);
+
+	public static void main(String[] args) {
+		Main m = new Main();
+		BinaryTree bt = m.new BinaryTree();
+bt.verticaldisplay();
+	}
+	
+
+
+	private class BinaryTree {
+		private class Node {
+			int data;
+			Node left;
+			Node right;
+		}
+
+		private Node root;
+		private int size;
+
+		public BinaryTree() {
+			this.root = this.takeInput(null);
+		}
+
+		public Node takeInput(Node parent) {
+
+    Node n=new Node();
+    n.data=scn.nextInt();
+    Queue<Node>q=new LinkedList<>();
+    q.add(n);
+    while(!q.isEmpty())
+    { 
+        int x=scn.nextInt();
+        int y=scn.nextInt();
+        if(x!=-1)
+        {
+            Node l=new Node();
+            l.data=x;
+            (q.peek()).left=l;
+            q.add(l);
+        }
+        if(y!=-1)
+        {
+            Node r=new Node();
+            r.data=y;
+         (q.peek()).right=r;
+            q.add(r);
+        }
+        q.remove();
+    }
+return n;
+		
+		}
+
+		public void display() {
+			this.display(this.root);
+		}
+
+		private void display(Node node) {
+			if (node == null) {
+				return;
+			}
+
+			String str = "";
+
+			if (node.left != null) {
+				str += node.left.data;
+			} else {
+				str += "END";
+			}
+
+			str += " => " + node.data + " <= ";
+
+			if (node.right != null) {
+				str += node.right.data;
+			} else {
+				str += "END";
+			}
+
+			System.out.println(str);
+
+			this.display(node.left);
+			this.display(node.right);
+		}
+		public class vopair{
+		int val;
+		int vlevel;
+		int hlevel;
+		 vopair(int val,int vlevel,int hlevel)
+		{
+			this.val=val;
+			this.vlevel=vlevel;
+			this.hlevel=hlevel;
+		}
+	}
+	public void verticaldisplay()
+	{
+        HashMap<Integer,ArrayList<vopair>>map=new HashMap<>();
+        leftdis(map,0,0,root);
+        ArrayList<Integer>key=new ArrayList<>(map.keySet());
+        Collections.sort(key);
+        for(int x:map.keySet())
+        {
+            Collections.sort(map.get(x),new Comparator<vopair>()
+            {
+                public int compare(vopair p1,vopair p2)
+                {
+                    return p1.hlevel-p2.hlevel;
+                }
+            });
+        }
+        StringBuilder sb=new StringBuilder();
+        for(int a:key)
+        {
+            sb.append(map.get(a).get(0).val+" ");
+        }
+        System.out.println(sb);
+    }
+    private void leftdis( HashMap<Integer,ArrayList<vopair>>map,int vlevel,int hlevel,Node temp)
+    {
+        if(temp==null)
+        {
+            return ;
+        }
+        if(!map.containsKey(vlevel))
+        {
+            ArrayList<vopair>a=new ArrayList<>();
+            map.put(vlevel,a);
+        }
+        vopair v=new vopair(temp.data,vlevel,hlevel);
+        map.get(vlevel).add(v);
+        leftdis(map,vlevel+1,hlevel-1,temp.left);
+        leftdis(map,vlevel+1,hlevel+1,temp.right);
+    }
+
+}
+}
+
+
+
